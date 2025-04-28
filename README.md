@@ -1,6 +1,3 @@
-Okay, here is a professional README.md file tailored for your project, based on the details provided and suitable for an interview context.
-
-```markdown
 # Multi-Cloud Web Server Deployment using Terraform (AWS + GCP)
 
 ## Objective
