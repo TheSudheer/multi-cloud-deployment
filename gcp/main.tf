@@ -23,7 +23,7 @@ variable "env_prefix" {
 }
 
 variable "my_ip" {
-  description = "Your public IP address in CIDR notation (e.g., 'x.x.x.x/32') for SSH access."
+  description = "our public IP address in CIDR notation (e.g., 'x.x.x.x/32') for SSH access."
   type        = string
 }
 
@@ -33,7 +33,7 @@ variable "machine_type" {
 }
 
 variable "private_key_location" {
-  description = "The file path to your private SSH key."
+  description = "The file path to my private SSH key."
   type        = string
 }
 
@@ -61,7 +61,7 @@ variable "ssh_username" {
 # Create a custom VPC Network
 resource "google_compute_network" "vpc_network" {
   name                    = "${var.env_prefix}-${var.network_name}"
-  auto_create_subnetworks = false # I want custom subnetworks
+  auto_create_subnetworks = false 
 }
 
 # Create a Subnetwork within the VPC Network
@@ -71,7 +71,7 @@ resource "google_compute_subnetwork" "subnet" {
   network       = google_compute_network.vpc_network.id
 }
 
-# Firewall rule to allow SSH (port 22) from your IP
+# Firewall rule to allow SSH (port 22) from my IP
 resource "google_compute_firewall" "allow_ssh" {
   name      = "${var.env_prefix}-allow-ssh"
   network   = google_compute_network.vpc_network.self_link
@@ -87,7 +87,7 @@ resource "google_compute_firewall" "allow_ssh" {
   target_tags = ["${var.env_prefix}-vm"]
 }
 
-# Firewall rule to allow traffic on port 8080 from your IP
+# Firewall rule to allow traffic on port 8080 from my IP
 # Change source_ranges to ["0.0.0.0/0"] for public access
 resource "google_compute_firewall" "allow_web_8080" {
   name      = "${var.env_prefix}-allow-web-8080"
@@ -105,7 +105,7 @@ resource "google_compute_firewall" "allow_web_8080" {
 }
 
 # Note: GCP allows all egress traffic by default, so no explicit egress rule is needed
-# unless you want to restrict outbound traffic.
+# unless we want to restrict outbound traffic.
 
 # Get the latest image from the specified family and project
 data "google_compute_image" "vm_image" {
@@ -125,7 +125,7 @@ resource "google_compute_instance" "myapp_server" {
   boot_disk {
     initialize_params {
       image = data.google_compute_image.vm_image.self_link
-      size  = 15 # Optional: specify disk size in GB
+      size  = 15 # specifying disk size in GB
     }
   }
 
@@ -142,7 +142,7 @@ resource "google_compute_instance" "myapp_server" {
     enable-oslogin = "FALSE"
   }
 
-  # Define labels (similar to AWS Tags)
+  # Define labels
   labels = {
     environment = var.env_prefix
     app         = "myapp"
@@ -151,7 +151,7 @@ resource "google_compute_instance" "myapp_server" {
   # Optional: Allow stopping/starting the instance without deleting it
   allow_stopping_for_update = true
 
-  # --- SSH connection info for provisioners ---
+  # SSH connection info for provisioners 
   connection {
     type        = "ssh"
     host        = self.network_interface[0].access_config[0].nat_ip
@@ -160,17 +160,17 @@ resource "google_compute_instance" "myapp_server" {
     
   }
 
-  # --- Copy my script ---
+  # Copy my script 
   provisioner "file" {
     source      = "${path.module}/startup-script.sh"
     destination = "/tmp/startup-script.sh"
   }
 
-  # --- Then run it ---
+  # Then run it 
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/startup-script.sh",
-      "sudo /tmp/startup-script.sh"
+      "sudo /tmp/startup-script.sh ${var.ssh_username}"
     ]
   }
 }
