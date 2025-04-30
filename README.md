@@ -124,10 +124,10 @@ Terraform will print the public IPs for each instance upon completion.
 
 Evidence of successful deployment and configuration is provided via the following screenshots located in the `screenshots/` directory:
 
-*   **AWS Instance:** Shows the running EC2 instance in the AWS Management Console.
+*   **AWS Instance:** Shows the running EC2 instance with IP Address.
     ![AWS Instance](screenshots/aws.png)
 
-*   **GCP Instance:** Shows the running Compute Engine instance in the Google Cloud Console.
+*   **GCP Instance:** Shows the running Compute Engine instance with IP Address.
     ![GCP Instance](screenshots/gcp.png)
 
 *   **Local Hostname Access:** Demonstrates accessing the NGINX service using the local hostname (`http://multi-cloud.local:8080`) after configuring the `/etc/hosts` file.
