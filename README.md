@@ -16,7 +16,8 @@ The infrastructure consists of the following components deployed in parallel on 
    - All egress traffic (restricted to `my_ip` in the provided AWS config, fully open in GCP config).
 4. **Web Server:** NGINX is automatically installed and started on both instances using startup scripts (`entry-script.sh` for AWS, `startup-script.sh` for GCP). NGINX listens on port **8080**.
 
-**Infrastructure Diagram:** See `screenshots/infrastructure.png`
+**Infrastructure Diagram** 
+![Multi Cloud infrastructure AWS + GCP](screenshots/infrastructure.png)
 
 ## Technologies Used
 
